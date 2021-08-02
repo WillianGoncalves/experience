@@ -1,24 +1,16 @@
-# README
+**create user**
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+```
+curl -d '{"user": {"email": "user@example.com", "password": "123456", "password_confirmation": "123456"}}' -X POST -H 'Content-Type: application/json' http://localhost:3001/users
+```
 
-Things you may want to cover:
+**login**
 
-* Ruby version
+```
+curl -i -d '{"user": {"email": "user@example.com", "password": "123456"}}' -X POST -H 'Content-Type: application/json' http://localhost:3001/users/sign_in
+```
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+**home**
+```
+curl -i -X GET -H 'Content-Type: application/json' -H 'Authorization: Bearer <TOKEN>' http://localhost:3001/
+```
