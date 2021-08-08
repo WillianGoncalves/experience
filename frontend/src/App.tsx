@@ -1,25 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 import './App.css';
+import { ProvideAuth } from './hooks/useAuth';
+import PublicPage from './PublicPage';
+import ProtectedPage from './ProtectedPage';
+import LoginPage from './LoginPage';
+import PrivateRoute from './PrivateRoute';
 
-function App() {
+function App(): any {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React!
-        </a>
-      </header>
-    </div>
+    <ProvideAuth>
+      <Router>
+        <div className="App">
+          <ul>
+            <li>
+              <Link to="/public">Public page</Link>
+            </li>
+            <li>
+              <Link to="/protected">Protected page</Link>
+            </li>
+          </ul>
+
+          <Switch>
+            <Route path="/public">
+              <PublicPage />
+            </Route>
+            <PrivateRoute path="/protected">
+              <ProtectedPage />
+            </PrivateRoute>
+            <Route path="/login">
+              <LoginPage />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </ProvideAuth>
   );
 }
 
