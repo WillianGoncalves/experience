@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth';
 
 const LoginPage = (): any => {
+  const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const auth = useAuth();
 
-  const onSubmit = (e: any): void => {
+  const onSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
-    console.log(`request to sign_in with ${email} and ${password}`);
+    await auth.signin(email, password);
+    history.replace('/');
   };
 
   return (

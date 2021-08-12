@@ -1,22 +1,28 @@
 import React, { useState, useContext, createContext } from 'react';
+import Api from '../api/api';
 
-const authContext = createContext({});
+const AuthContext = createContext({});
 
 export function useAuth(): any {
-  return useContext(authContext);
+  return useContext(AuthContext);
 }
 
-export function useProvideAuth(): any {
+function useProvideAuth(): any {
   const [user, setUser] = useState(null);
 
-  const signin = (): void => {
-    // request to sign_in
-    setUser(null);
+  const signin = async (email: string, password: string): Promise<void> => {
+    const { user: loggedUser, token }: any = await new Api().signin({
+      email,
+      password,
+    });
+    localStorage.setItem('token', token);
+    setUser(loggedUser);
   };
 
-  const signout = (): void => {
-    // request to sign_ou
+  const signout = async (): Promise<void> => {
+    localStorage.removeItem('token');
     setUser(null);
+    await new Api().signout();
   };
 
   return {
@@ -29,5 +35,5 @@ export function useProvideAuth(): any {
 export function ProvideAuth({ children }: any): any {
   const auth = useProvideAuth();
 
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
